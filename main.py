@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 import torch
@@ -28,6 +30,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="."), name="static")
 
 # Global variables to store the model and tokenizer
 model = None
@@ -290,8 +295,14 @@ async def root():
             "query": "POST /query - Query the deployed model",
             "status": "GET /status - Get model status",
             "undeploy": "DELETE /undeploy - Undeploy current model"
-        }
+        },
+        "web_interface": "GET /web-interface - Access the web interface"
     }
+
+@app.get("/web-interface")
+async def web_interface():
+    """Serve the web interface."""
+    return FileResponse("web_interface.html")
 
 if __name__ == "__main__":
     import uvicorn

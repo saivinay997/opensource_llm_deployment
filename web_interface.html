@@ -202,10 +202,16 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="hfToken">Hugging Face Token (Optional):</label>
+                        <input type="password" id="hfToken" placeholder="Enter your HF token for gated models">
+                        <small style="color: #666; font-size: 12px;">Required for gated models like Gemma, Llama, etc.</small>
+                    </div>
+
+                    <div class="form-group">
                         <label for="device">Device:</label>
                         <select id="device">
-                            <option value="auto">Auto (Recommended)</option>
-                            <option value="cpu">CPU</option>
+                            <option value="cpu">CPU (Recommended for VM)</option>
+                            <option value="auto">Auto</option>
                             <option value="cuda">CUDA (GPU)</option>
                             <option value="mps">MPS (Apple Silicon)</option>
                         </select>
@@ -279,7 +285,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:8000';
+        const API_BASE = 'http://40.81.226.13:8000';
 
         async function makeRequest(endpoint, method = 'GET', data = null) {
             try {
@@ -319,6 +325,7 @@
 
         async function deployModel() {
             const modelName = document.getElementById('modelName').value;
+            const hfToken = document.getElementById('hfToken').value;
             const device = document.getElementById('device').value;
             const load8bit = document.getElementById('load8bit').checked;
             const load4bit = document.getElementById('load4bit').checked;
@@ -338,6 +345,11 @@
                     load_in_4bit: load4bit,
                     trust_remote_code: true
                 };
+
+                // Add HF token if provided
+                if (hfToken && hfToken.trim()) {
+                    data.hf_token = hfToken.trim();
+                }
 
                 const result = await makeRequest('/deploy', 'POST', data);
                 showStatus('deployStatus', `✅ ${result.message}`, 'success');

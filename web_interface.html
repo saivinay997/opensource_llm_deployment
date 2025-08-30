@@ -13,53 +13,164 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8f4ff;
             min-height: 100vh;
             padding: 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            color: #8b5cf6;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        .nav-links .icon {
+            margin-right: 5px;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #e9d5ff;
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .model-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            background: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .model-input:focus {
+            border-color: #8b5cf6;
+        }
+
+        .deploy-btn {
+            background: #8b5cf6;
             color: white;
-            padding: 30px;
-            text-align: center;
+            border: 2px solid #000;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
 
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .deploy-btn:hover {
+            transform: translateY(-2px);
         }
 
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+        .deploy-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .content {
-            padding: 30px;
+        .status-container {
+            background: #f3e8ff;
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-text {
+            color: #8b5cf6;
+            font-weight: 500;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #8b5cf6;
+            font-size: 14px;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .progress-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .progress-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
 
         .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            background: #fafafa;
+            background: #f3e8ff;
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
         }
 
         .section h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+            color: #8b5cf6;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
         }
 
         .form-group {
@@ -68,23 +179,23 @@
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #555;
+            color: #6b21a8;
         }
 
         input, select, textarea {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            background: white;
             font-size: 14px;
-            transition: border-color 0.3s;
+            outline: none;
         }
 
         input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
+            border-color: #8b5cf6;
         }
 
         textarea {
@@ -93,61 +204,54 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #8b5cf6;
             color: white;
+            border: 2px solid #000;
+            border-radius: 10px;
             padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
             transition: transform 0.2s;
+            margin-right: 10px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .btn-danger {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            background: #ef4444;
         }
 
         .status {
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 15px;
             font-weight: 600;
+            border: 2px solid #000;
         }
 
         .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #dcfce7;
+            color: #166534;
         }
 
         .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #fef2f2;
+            color: #991b1b;
         }
 
         .status.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+            background: #f0f9ff;
+            color: #1e40af;
         }
 
         .response {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 10px;
+            padding: 20px;
             margin-top: 15px;
             white-space: pre-wrap;
             font-family: 'Courier New', monospace;
@@ -159,7 +263,7 @@
             width: 20px;
             height: 20px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border-top: 3px solid #8b5cf6;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 10px;
@@ -176,112 +280,229 @@
             gap: 20px;
         }
 
+        .quick-presets {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #6b21a8;
+        }
+
+        .quick-presets a {
+            color: #8b5cf6;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .quick-presets a:hover {
+            text-decoration: underline;
+        }
+
+        /* Toggle Switch Styles */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+            border: 2px solid #000;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            border: 1px solid #000;
+        }
+
+        input:checked + .slider {
+            background-color: #8b5cf6;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-label {
+            font-weight: 600;
+            color: #6b21a8;
+            margin: 0;
+        }
+
+        .button-row {
+            margin-bottom: 30px;
+        }
+
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .input-section {
+                flex-direction: column;
+            }
+            
+            .status-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚀 Open Source LLM Deployment Service</h1>
-            <p>Deploy and query any open-source LLM from Hugging Face</p>
+    <div class="header">
+        <div class="logo">LLMDeploy</div>
+        <div class="nav-links">
+            <a href="#"><span class="icon">🐙</span>GitHub</a>
+            <a href="#"><span class="icon">⭐</span>1.2k</a>
         </div>
+    </div>
 
-        <div class="content">
-            <div class="grid">
-                <!-- Model Management Section -->
-                <div class="section">
-                    <h2>📦 Model Management</h2>
-                    
-                    <div class="form-group">
-                        <label for="modelName">Model Name:</label>
-                        <input type="text" id="modelName" placeholder="e.g., microsoft/DialoGPT-medium" value="microsoft/DialoGPT-medium">
-                    </div>
+    <div class="main-container">
+        <div class="input-section">
+            <input type="text" class="model-input" id="modelName" placeholder="Enter model name (e.g., microsoft/DialoGPT-medium)" value="microsoft/DialoGPT-medium">
+            <button class="deploy-btn" onclick="deployModel()">Deploy</button>
+        </div>
+        
+        <div class="quick-presets">
+            <strong>Quick presets:</strong> 
+            <a href="#" onclick="setModel('microsoft/DialoGPT-medium')">DialoGPT</a>
+            <a href="#" onclick="setModel('gpt2')">GPT-2</a>
+            <a href="#" onclick="setModel('openai/gpt-oss-20b')">GPT-OSS-20B</a>
+            <a href="#" onclick="setModel('distilgpt2')">DistilGPT-2</a>
+        </div>
+    </div>
 
-                    <div class="form-group">
-                        <label for="hfToken">Hugging Face Token (Optional):</label>
-                        <input type="password" id="hfToken" placeholder="Enter your HF token for gated models">
-                        <small style="color: #666; font-size: 12px;">Required for gated models like Gemma, Llama, etc.</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="device">Device:</label>
-                        <select id="device">
-                            <option value="cpu">CPU (Recommended for VM)</option>
-                            <option value="auto">Auto</option>
-                            <option value="cuda">CUDA (GPU)</option>
-                            <option value="mps">MPS (Apple Silicon)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="load8bit"> Load in 8-bit (Memory Efficient)
-                        </label>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="load4bit"> Load in 4-bit (Most Memory Efficient)
-                        </label>
-                    </div>
-
-                    <button class="btn" onclick="deployModel()">Deploy Model</button>
-                    <button class="btn btn-danger" onclick="undeployModel()">Undeploy Model</button>
-                    
-                    <div id="deployStatus"></div>
-                </div>
-
-                <!-- Model Status Section -->
-                <div class="section">
-                    <h2>📊 Model Status</h2>
-                    
-                    <button class="btn" onclick="checkStatus()">Check Status</button>
-                    
-                    <div id="statusDisplay"></div>
-                </div>
-            </div>
-
-            <!-- Query Section -->
-            <div class="section">
-                <h2>💬 Query Model</h2>
-                
-                <div class="form-group">
-                    <label for="prompt">Prompt:</label>
-                    <textarea id="prompt" placeholder="Enter your prompt here...">Hello, how are you today?</textarea>
-                </div>
-
-                <div class="grid">
-                    <div class="form-group">
-                        <label for="maxLength">Max Length:</label>
-                        <input type="number" id="maxLength" value="512" min="1" max="2048">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="temperature">Temperature:</label>
-                        <input type="number" id="temperature" value="0.7" min="0" max="2" step="0.1">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="topP">Top P:</label>
-                        <input type="number" id="topP" value="0.9" min="0" max="1" step="0.1">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="topK">Top K:</label>
-                        <input type="number" id="topK" value="50" min="1" max="100">
-                    </div>
-                </div>
-
-                <button class="btn" onclick="queryModel()">Generate Response</button>
-                
-                <div id="queryStatus"></div>
-                <div id="queryResponse"></div>
+    <div class="status-container" id="statusContainer" style="display: none;">
+        <div class="status-text" id="statusText">Model is loading...</div>
+        <div class="progress-info">
+            <span id="progressInfo">Step 1/3</span>
+            <div class="progress-dots">
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
             </div>
         </div>
+    </div>
+
+    <div class="section">
+        <h2>Model Configuration</h2>
+        
+        <div class="grid">
+            <div class="form-group">
+                <label for="hfToken">Hugging Face Token (Optional):</label>
+                <input type="password" id="hfToken" placeholder="Enter your HF token for gated models">
+            </div>
+
+            <div class="form-group">
+                <label for="device">Device:</label>
+                <select id="device">
+                    <option value="cpu">CPU (Recommended for VM)</option>
+                    <option value="auto">Auto</option>
+                    <option value="cuda">CUDA (GPU)</option>
+                    <option value="mps">MPS (Apple Silicon)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="toggle-container">
+            <label class="toggle-switch">
+                <input type="checkbox" id="load8bit">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label">Load in 8-bit (Memory Efficient)</span>
+        </div>
+
+        <div class="toggle-container">
+            <label class="toggle-switch">
+                <input type="checkbox" id="load4bit">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label">Load in 4-bit (Most Memory Efficient)</span>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-danger" onclick="undeployModel()">Undeploy Model</button>
+            <button class="btn" onclick="checkStatus()">Check Status</button>
+        </div>
+        
+        <div id="deployStatus"></div>
+        <div id="statusDisplay"></div>
+    </div>
+
+    <div class="section">
+        <h2>Query Model</h2>
+        
+        <div class="form-group">
+            <label for="prompt">Prompt:</label>
+            <textarea id="prompt" placeholder="Enter your prompt here...">Hello, how are you today?</textarea>
+        </div>
+
+        <div class="grid">
+            <div class="form-group">
+                <label for="maxLength">Max Length:</label>
+                <input type="number" id="maxLength" value="512" min="1" max="2048">
+            </div>
+
+            <div class="form-group">
+                <label for="temperature">Temperature:</label>
+                <input type="number" id="temperature" value="0.7" min="0" max="2" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label for="topP">Top P:</label>
+                <input type="number" id="topP" value="0.9" min="0" max="1" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label for="topK">Top K:</label>
+                <input type="number" id="topK" value="50" min="1" max="100">
+            </div>
+        </div>
+
+        <button class="btn" onclick="queryModel()">Generate Response</button>
+        
+        <div id="queryStatus"></div>
+        <div id="queryResponse"></div>
     </div>
 
     <script>
@@ -323,6 +544,20 @@
             element.innerHTML = `<div class="status info"><span class="loading"></span>Loading...</div>`;
         }
 
+        function showProgressStatus(message, step = 1) {
+            const statusContainer = document.getElementById('statusContainer');
+            const statusText = document.getElementById('statusText');
+            const progressInfo = document.getElementById('progressInfo');
+            
+            statusContainer.style.display = 'flex';
+            statusText.textContent = message;
+            progressInfo.textContent = `Step ${step}/3`;
+        }
+
+        function hideProgressStatus() {
+            document.getElementById('statusContainer').style.display = 'none';
+        }
+
         async function deployModel() {
             const modelName = document.getElementById('modelName').value;
             const hfToken = document.getElementById('hfToken').value;
@@ -335,6 +570,7 @@
                 return;
             }
 
+            showProgressStatus('Model is reasoning about repository structure', 1);
             showLoading('deployStatus');
 
             try {
@@ -351,12 +587,20 @@
                     data.hf_token = hfToken.trim();
                 }
 
+                showProgressStatus('Downloading model files', 2);
+                
                 const result = await makeRequest('/deploy', 'POST', data);
-                showStatus('deployStatus', `✅ ${result.message}`, 'success');
+                
+                showProgressStatus('Model deployment completed', 3);
+                setTimeout(() => {
+                    hideProgressStatus();
+                    showStatus('deployStatus', `✅ ${result.message}`, 'success');
+                }, 2000);
                 
                 // Auto-check status after deployment
-                setTimeout(checkStatus, 2000);
+                setTimeout(checkStatus, 3000);
             } catch (error) {
+                hideProgressStatus();
                 showStatus('deployStatus', `❌ Error: ${error.message}`, 'error');
             }
         }
@@ -448,6 +692,20 @@ ${result.response}
         window.onload = function() {
             checkStatus();
         };
+
+        // Function to set model name
+        function setModel(modelName) {
+            document.getElementById('modelName').value = modelName;
+            
+            // Show appropriate warnings for large models
+            if (modelName.includes('20b') || modelName.includes('gpt-oss')) {
+                if (modelName.includes('gpt-oss')) {
+                    showStatus('deployStatus', '⚠️ GPT-OSS-20B has known compatibility issues. Try gpt2 or microsoft/DialoGPT-medium first!', 'info');
+                } else {
+                    showStatus('deployStatus', '⚠️ Large model detected! Ensure you have sufficient RAM (32GB+ recommended)', 'info');
+                }
+            }
+        }
     </script>
 </body>
 </html>

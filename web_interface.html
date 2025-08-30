@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Source LLM Deployment Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Open Source LLM Deployment Service</h1>
+            <p>Deploy and query any open-source LLM from Hugging Face</p>
+        </div>
+
+        <div class="content">
+            <div class="grid">
+                <!-- Model Management Section -->
+                <div class="section">
+                    <h2>📦 Model Management</h2>
+                    
+                    <div class="form-group">
+                        <label for="modelName">Model Name:</label>
+                        <input type="text" id="modelName" placeholder="e.g., microsoft/DialoGPT-medium" value="microsoft/DialoGPT-medium">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="device">Device:</label>
+                        <select id="device">
+                            <option value="auto">Auto (Recommended)</option>
+                            <option value="cpu">CPU</option>
+                            <option value="cuda">CUDA (GPU)</option>
+                            <option value="mps">MPS (Apple Silicon)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="load8bit"> Load in 8-bit (Memory Efficient)
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="load4bit"> Load in 4-bit (Most Memory Efficient)
+                        </label>
+                    </div>
+
+                    <button class="btn" onclick="deployModel()">Deploy Model</button>
+                    <button class="btn btn-danger" onclick="undeployModel()">Undeploy Model</button>
+                    
+                    <div id="deployStatus"></div>
+                </div>
+
+                <!-- Model Status Section -->
+                <div class="section">
+                    <h2>📊 Model Status</h2>
+                    
+                    <button class="btn" onclick="checkStatus()">Check Status</button>
+                    
+                    <div id="statusDisplay"></div>
+                </div>
+            </div>
+
+            <!-- Query Section -->
+            <div class="section">
+                <h2>💬 Query Model</h2>
+                
+                <div class="form-group">
+                    <label for="prompt">Prompt:</label>
+                    <textarea id="prompt" placeholder="Enter your prompt here...">Hello, how are you today?</textarea>
+                </div>
+
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="maxLength">Max Length:</label>
+                        <input type="number" id="maxLength" value="512" min="1" max="2048">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="temperature">Temperature:</label>
+                        <input type="number" id="temperature" value="0.7" min="0" max="2" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topP">Top P:</label>
+                        <input type="number" id="topP" value="0.9" min="0" max="1" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topK">Top K:</label>
+                        <input type="number" id="topK" value="50" min="1" max="100">
+                    </div>
+                </div>
+
+                <button class="btn" onclick="queryModel()">Generate Response</button>
+                
+                <div id="queryStatus"></div>
+                <div id="queryResponse"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function makeRequest(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.detail || 'Request failed');
+                }
+
+                return result;
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        function showStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status info"><span class="loading"></span>Loading...</div>`;
+        }
+
+        async function deployModel() {
+            const modelName = document.getElementById('modelName').value;
+            const device = document.getElementById('device').value;
+            const load8bit = document.getElementById('load8bit').checked;
+            const load4bit = document.getElementById('load4bit').checked;
+
+            if (!modelName) {
+                showStatus('deployStatus', 'Please enter a model name', 'error');
+                return;
+            }
+
+            showLoading('deployStatus');
+
+            try {
+                const data = {
+                    model_name: modelName,
+                    device: device,
+                    load_in_8bit: load8bit,
+                    load_in_4bit: load4bit,
+                    trust_remote_code: true
+                };
+
+                const result = await makeRequest('/deploy', 'POST', data);
+                showStatus('deployStatus', `✅ ${result.message}`, 'success');
+                
+                // Auto-check status after deployment
+                setTimeout(checkStatus, 2000);
+            } catch (error) {
+                showStatus('deployStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function undeployModel() {
+            showLoading('deployStatus');
+
+            try {
+                const result = await makeRequest('/undeploy', 'DELETE');
+                showStatus('deployStatus', `✅ ${result.message}`, 'success');
+                
+                // Clear status display
+                document.getElementById('statusDisplay').innerHTML = '';
+            } catch (error) {
+                showStatus('deployStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkStatus() {
+            showLoading('statusDisplay');
+
+            try {
+                const result = await makeRequest('/status');
+                
+                let statusHtml = '<div class="status info">';
+                statusHtml += `<strong>Model:</strong> ${result.model_name || 'None'}<br>`;
+                statusHtml += `<strong>Loaded:</strong> ${result.is_loaded ? '✅ Yes' : '❌ No'}<br>`;
+                statusHtml += `<strong>Loading:</strong> ${result.is_loading ? '⏳ Yes' : 'No'}<br>`;
+                if (result.device && result.device !== 'unknown') {
+                    statusHtml += `<strong>Device:</strong> ${result.device}`;
+                }
+                statusHtml += '</div>';
+                
+                document.getElementById('statusDisplay').innerHTML = statusHtml;
+            } catch (error) {
+                showStatus('statusDisplay', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function queryModel() {
+            const prompt = document.getElementById('prompt').value;
+            const maxLength = parseInt(document.getElementById('maxLength').value);
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const topP = parseFloat(document.getElementById('topP').value);
+            const topK = parseInt(document.getElementById('topK').value);
+
+            if (!prompt) {
+                showStatus('queryStatus', 'Please enter a prompt', 'error');
+                return;
+            }
+
+            showLoading('queryStatus');
+            document.getElementById('queryResponse').innerHTML = '';
+
+            try {
+                const data = {
+                    prompt: prompt,
+                    max_length: maxLength,
+                    temperature: temperature,
+                    top_p: topP,
+                    top_k: topK,
+                    do_sample: true,
+                    num_return_sequences: 1
+                };
+
+                const result = await makeRequest('/query', 'POST', data);
+                
+                showStatus('queryStatus', `✅ Generated in ${result.generation_time.toFixed(2)}s`, 'success');
+                
+                const responseHtml = `
+                    <div class="response">
+<strong>Response:</strong>
+${result.response}
+
+<strong>Model:</strong> ${result.model_name}
+<strong>Input Tokens:</strong> ${result.input_tokens}
+<strong>Output Tokens:</strong> ${result.output_tokens}
+<strong>Generation Time:</strong> ${result.generation_time.toFixed(2)}s
+                    </div>
+                `;
+                
+                document.getElementById('queryResponse').innerHTML = responseHtml;
+            } catch (error) {
+                showStatus('queryStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-check status on page load
+        window.onload = function() {
+            checkStatus();
+        };
+    </script>
+</body>
+</html>

@@ -24,6 +24,7 @@ class QueryRequest(BaseModel):
     
     prompt: str
     max_length: Optional[int] = 512
+    max_new_tokens: Optional[int] = None  # If provided, will override max_length calculation
     temperature: Optional[float] = 0.7
     top_p: Optional[float] = 0.9
     top_k: Optional[int] = 50

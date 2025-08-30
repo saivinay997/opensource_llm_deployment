@@ -99,11 +99,14 @@ class ModelManager:
                 logger.info("Applying memory optimizations for large model")
                 model_kwargs.update({
                     "low_cpu_mem_usage": True,
-                    "dtype": torch.float32,  # Use float32 for better compatibility
+                    "torch_dtype": torch.float32,  # Use torch_dtype instead of dtype
                     "offload_folder": "offload",  # Enable model offloading
                 })
             else:
-                model_kwargs["low_cpu_mem_usage"] = True
+                model_kwargs.update({
+                    "low_cpu_mem_usage": True,
+                    "torch_dtype": torch.float32,  # Ensure consistent dtype
+                })
             
             if hf_token:
                 model_kwargs["token"] = hf_token
@@ -130,8 +133,16 @@ class ModelManager:
                     **fallback_kwargs
                 )
             
-            # Ensure model is on CPU
+            # Ensure model is on CPU and has consistent dtype
             self.model = self.model.to("cpu")
+            
+            # Convert model to float32 to avoid dtype conflicts
+            if hasattr(self.model, 'to'):
+                self.model = self.model.to(torch.float32)
+            
+            # Set model to evaluation mode
+            if hasattr(self.model, 'eval'):
+                self.model.eval()
             
             # Create text generation pipeline with optimizations for large models
             pipeline_kwargs = {
@@ -192,9 +203,9 @@ class ModelManager:
             logger.error(f"Error undeploying model: {str(e)}")
             raise Exception(f"Undeploy error: {str(e)}")
     
-    def generate_response(self, prompt: str, max_length: int = 512, temperature: float = 0.7,
-                          top_p: float = 0.9, top_k: int = 50, do_sample: bool = True,
-                          num_return_sequences: int = 1) -> Dict[str, Any]:
+    def generate_response(self, prompt: str, max_length: int = 512, max_new_tokens: int = None,
+                          temperature: float = 0.7, top_p: float = 0.9, top_k: int = 50, 
+                          do_sample: bool = True, num_return_sequences: int = 1) -> Dict[str, Any]:
         """Generate a response using the loaded model."""
         if self.generator is None:
             raise Exception("No model is currently loaded. Please deploy a model first.")
@@ -209,13 +220,24 @@ class ModelManager:
             if self.model is None or self.tokenizer is None:
                 raise Exception("Model or tokenizer not properly loaded.")
             
-            # Tokenize input
-            inputs = self.tokenizer(prompt, return_tensors="pt")
+            # Tokenize input with explicit truncation
+            inputs = self.tokenizer(
+                prompt, 
+                return_tensors="pt",
+                truncation=True,
+                max_length=max_length
+            )
             input_tokens = inputs.input_ids.shape[1]
+            
+            # Calculate max_new_tokens (avoiding conflict with max_length)
+            if max_new_tokens is None:
+                max_new_tokens = max_length - input_tokens
+                # Ensure max_new_tokens is positive
+                max_new_tokens = max(1, max_new_tokens)
             
             # Generate response
             generation_kwargs = {
-                "max_length": max_length,
+                "max_new_tokens": max_new_tokens,  # Use max_new_tokens instead of max_length
                 "temperature": temperature,
                 "top_p": top_p,
                 "top_k": top_k,
@@ -246,6 +268,8 @@ class ModelManager:
             
         except Exception as e:
             logger.error(f"Error during generation: {str(e)}")
+            logger.error(f"Model dtype: {self.model.dtype if hasattr(self.model, 'dtype') else 'unknown'}")
+            logger.error(f"Input shape: {inputs.input_ids.shape if 'inputs' in locals() else 'unknown'}")
             raise Exception(f"Generation error: {str(e)}")
     
     def get_status(self) -> Dict[str, Any]:

@@ -62,6 +62,7 @@ async def query_model(query_request: QueryRequest):
         result = model_manager.generate_response(
             prompt=query_request.prompt,
             max_length=query_request.max_length,
+            max_new_tokens=query_request.max_new_tokens,
             temperature=query_request.temperature,
             top_p=query_request.top_p,
             top_k=query_request.top_k,

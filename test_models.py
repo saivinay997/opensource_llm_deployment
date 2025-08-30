@@ -59,12 +59,11 @@ def main():
     
     # Test models in order of reliability
     test_models = [
-        # "gpt2",  # Most reliable
-        # "distilgpt2",  # Smaller, faster
-        # "microsoft/DialoGPT-medium",  # Good for testing
-        # "EleutherAI/gpt-neo-125M",  # Alternative
-        # "facebook/opt-125m",  # Another option
-        "openai/gpt-oss-20b",  # Known problematic
+        "gpt2",  # Most reliable
+        "distilgpt2",  # Smaller, faster
+        "microsoft/DialoGPT-medium",  # Good for testing
+        "EleutherAI/gpt-neo-125M",  # Alternative
+        "facebook/opt-125m",  # Another option
     ]
     
     for model in test_models:
@@ -73,7 +72,6 @@ def main():
     print("🎯 Summary:")
     print("• gpt2 and distilgpt2 are the most reliable")
     print("• microsoft/DialoGPT-medium is good for testing")
-    print("• openai/gpt-oss-20b has known compatibility issues")
     print("• Try the recommended models first!")
 
 if __name__ == "__main__":

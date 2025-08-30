@@ -97,36 +97,7 @@
    rm -rf ~/.cache/huggingface/
    ```
 
-### 4. PyTorch Compatibility Issues
-
-**Error**: `AttributeError: module 'torch.utils._pytree' has no attribute 'register_pytree_node'`
-
-**Solutions**:
-1. **Run Compatibility Fix Script**:
-   ```bash
-   python fix_pytorch_compatibility.py
-   ```
-
-2. **Manual Package Update**:
-   ```bash
-   pip install --upgrade torch transformers
-   pip install torch==2.1.2 transformers==4.36.0
-   ```
-
-3. **Test the Fix**:
-   ```bash
-   python test_basic_setup.py
-   ```
-
-4. **Reinstall Dependencies**:
-   ```bash
-   pip uninstall torch transformers
-   pip install torch==2.1.2 transformers==4.36.0
-   ```
-
-**Root Cause**: Version mismatch between PyTorch and transformers libraries
-
-### 5. CPU Performance Issues
+### 4. CPU Performance Issues
 
 **Issue**: Slow inference on CPU
 

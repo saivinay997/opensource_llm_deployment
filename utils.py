@@ -65,14 +65,14 @@ def get_model_recommendations(available_ram_gb: float) -> List[str]:
     elif available_ram_gb < 32:
         return ["facebook/opt-350m", "microsoft/DialoGPT-large"]
     else:
-        return ["openai/gpt-oss-20b", "other large models"]
+        return ["facebook/opt-1.3b", "microsoft/DialoGPT-large", "other large models"]
 
 
 def format_error_message(error: str) -> str:
     """Format error messages with helpful suggestions."""
     if "ModelWrapper" in error or "tokenizer" in error.lower():
-        error += "\n\n💡 GPT-OSS-20B Compatibility Issue:\n"
-        error += "This model has known compatibility issues with the current transformers version.\n"
+        error += "\n\n💡 Model Compatibility Issue:\n"
+        error += "This model may have compatibility issues with the current transformers version.\n"
         error += "\n💡 Try these alternative models instead:\n"
         error += "• microsoft/DialoGPT-medium (recommended for testing)\n"
         error += "• gpt2 (very reliable)\n"
@@ -80,13 +80,13 @@ def format_error_message(error: str) -> str:
         error += "• EleutherAI/gpt-neo-125M\n"
         error += "• facebook/opt-125m\n"
         error += "• microsoft/DialoGPT-large (if you have enough RAM)\n"
-        error += "\n💡 For GPT-OSS-20B specifically:\n"
+        error += "\n💡 General fixes:\n"
         error += "• Try updating transformers: pip install --upgrade transformers\n"
         error += "• Or use a different model for now\n"
     elif "out of memory" in error.lower() or "oom" in error.lower():
         error += "\n\n💡 Memory optimization suggestions:\n"
         error += "• Try a smaller model (gpt2, distilgpt2)\n"
-        error += "• Ensure you have at least 32GB RAM for gpt-oss-20b\n"
+        error += "• Ensure you have sufficient RAM for the model\n"
         error += "• Consider using model offloading\n"
         error += "• Try microsoft/DialoGPT-medium instead\n"
     
@@ -95,7 +95,7 @@ def format_error_message(error: str) -> str:
 
 def is_large_model(model_name: str) -> bool:
     """Check if a model is considered large."""
-    large_indicators = ["20b", "gpt-oss", "70b", "175b"]
+    large_indicators = ["20b", "70b", "175b", "13b", "7b"]
     return any(indicator in model_name.lower() for indicator in large_indicators)
 
 

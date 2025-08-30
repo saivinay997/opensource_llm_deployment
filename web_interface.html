@@ -407,7 +407,7 @@
             <strong>Quick presets:</strong> 
             <a href="#" onclick="setModel('microsoft/DialoGPT-medium')">DialoGPT</a>
             <a href="#" onclick="setModel('gpt2')">GPT-2</a>
-            <a href="#" onclick="setModel('openai/gpt-oss-20b')">GPT-OSS-20B</a>
+            <a href="#" onclick="setModel('facebook/opt-1.3b')">OPT-1.3B</a>
             <a href="#" onclick="setModel('distilgpt2')">DistilGPT-2</a>
         </div>
     </div>
@@ -698,12 +698,8 @@ ${result.response}
             document.getElementById('modelName').value = modelName;
             
             // Show appropriate warnings for large models
-            if (modelName.includes('20b') || modelName.includes('gpt-oss')) {
-                if (modelName.includes('gpt-oss')) {
-                    showStatus('deployStatus', '⚠️ GPT-OSS-20B has known compatibility issues. Try gpt2 or microsoft/DialoGPT-medium first!', 'info');
-                } else {
-                    showStatus('deployStatus', '⚠️ Large model detected! Ensure you have sufficient RAM (32GB+ recommended)', 'info');
-                }
+            if (modelName.includes('20b') || modelName.includes('1.3b')) {
+                showStatus('deployStatus', '⚠️ Large model detected! Ensure you have sufficient RAM (16GB+ recommended)', 'info');
             }
         }
     </script>

@@ -46,7 +46,7 @@ class Settings:
         "small": ["gpt2", "distilgpt2"],
         "medium": ["microsoft/DialoGPT-medium", "EleutherAI/gpt-neo-125M"],
         "large": ["facebook/opt-350m", "microsoft/DialoGPT-large"],
-        "xlarge": ["openai/gpt-oss-20b"]
+        "xlarge": ["facebook/opt-1.3b", "microsoft/DialoGPT-large"]
     }
     
     # Memory Requirements (in GB)

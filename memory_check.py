@@ -50,7 +50,7 @@ def main():
         print("   💡 Recommended: microsoft/DialoGPT-medium, gpt2")
     else:
         print("   ✅ Sufficient RAM for large models")
-        print("   💡 You can try openai/gpt-oss-20b")
+        print("   💡 You can try facebook/opt-1.3b or other large models")
     
     if disk['free_gb'] < 50:
         print("   ⚠️  Limited disk space for model caching")
@@ -66,7 +66,7 @@ def main():
     print(f"   < 8GB:  gpt2, distilgpt2")
     print(f"   8-16GB: microsoft/DialoGPT-medium, EleutherAI/gpt-neo-125M")
     print(f"   16-32GB: facebook/opt-350m, microsoft/DialoGPT-large")
-    print(f"   > 32GB: openai/gpt-oss-20b, other large models")
+    print(f"   > 32GB: facebook/opt-1.3b, other large models")
 
 def check_model_requirements(model_name):
     """Check specific requirements for a model."""
@@ -96,4 +96,4 @@ if __name__ == "__main__":
         check_model_requirements(model_name)
     else:
         print(f"\n💡 Usage: python memory_check.py <model_name>")
-        print(f"   Example: python memory_check.py openai/gpt-oss-20b")
+        print(f"   Example: python memory_check.py facebook/opt-1.3b")

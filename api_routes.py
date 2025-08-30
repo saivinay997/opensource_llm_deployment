@@ -24,10 +24,11 @@ executor = ThreadPoolExecutor(max_workers=1)
 @router.post("/deploy", response_model=Dict[str, Any])
 async def deploy_model(model_request: ModelRequest, background_tasks: BackgroundTasks):
     """Deploy a new model from Hugging Face."""
+    
     if model_manager.is_loading:
         raise HTTPException(status_code=400, detail="Model is currently loading. Please wait.")
     
-    if model_manager.model is not None:
+    if model_manager.model is not None or model_manager.generator is not None:
         raise HTTPException(status_code=400, detail="Model is already loaded. Use /undeploy to unload first.")
     
     device = model_manager.get_device(model_request.device)
@@ -91,6 +92,9 @@ async def undeploy_model():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+
+
+
 @router.get("/")
 async def root():
     """Root endpoint with service information."""
@@ -103,5 +107,6 @@ async def root():
             "status": "GET /status - Get model status",
             "undeploy": "DELETE /undeploy - Undeploy current model"
         },
-        "web_interface": "GET /web-interface - Access the web interface"
+        "web_interface": "GET /web-interface - Access the web interface",
+        "supported_models": "Any Hugging Face model supported"
     }

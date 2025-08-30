@@ -30,14 +30,14 @@ class ModelManager:
         # Force CPU usage for VM compatibility
         return "cpu"
     
-        def load_model_sync(self, model_name: str, device: str, load_in_8bit: bool, 
+    def load_model_sync(self, model_name: str, device: str, load_in_8bit: bool, 
                         load_in_4bit: bool, trust_remote_code: bool, hf_token: str = None):
         """Load model synchronously in a separate thread."""
         try:
             logger.info(f"Loading model: {model_name}")
             self.is_loading = True
             
-            # Special handling for large models like gpt-oss-20b
+            # Special handling for large models
             is_large_model_flag = is_large_model(model_name)
             
             if is_large_model_flag:
@@ -59,33 +59,7 @@ class ModelManager:
                     load_in_8bit = False
                     load_in_4bit = False
             
-            # Special handling for GPT-OSS-20B using pipeline approach
-            if "gpt-oss" in model_name.lower():
-                logger.info("Using GPT-OSS pipeline approach")
-                
-                # Set up pipeline kwargs for GPT-OSS
-                pipeline_kwargs = {
-                    "model": model_name,
-                    "torch_dtype": "auto",
-                    "device_map": "auto" if device == "auto" else None,
-                    "trust_remote_code": trust_remote_code,
-                }
-                
-                # Add token if provided
-                if hf_token:
-                    pipeline_kwargs["token"] = hf_token
-                
-                # Force CPU for VM compatibility
-                if device == "cpu":
-                    pipeline_kwargs["device_map"] = None
-                
-                # Create pipeline directly (no separate tokenizer/model loading)
-                self.generator = pipeline("text-generation", **pipeline_kwargs)
-                self.model_name = model_name
-                
-                logger.info(f"GPT-OSS model {model_name} loaded successfully using pipeline")
-                self.is_loading = False
-                return
+
             
             # Standard approach for other models
             # Load tokenizer with fallback options
@@ -188,14 +162,17 @@ class ModelManager:
     
     def unload_model(self):
         """Unload the current model and free memory."""
-        if self.model is None:
+        if self.model is None and self.generator is None:
             raise Exception("No model is currently loaded.")
         
         try:
             # Clear model references
-            del self.model
-            del self.tokenizer
-            del self.generator
+            if self.model is not None:
+                del self.model
+            if self.tokenizer is not None:
+                del self.tokenizer
+            if self.generator is not None:
+                del self.generator
             
             # Force garbage collection
             import gc
@@ -216,10 +193,10 @@ class ModelManager:
             raise Exception(f"Undeploy error: {str(e)}")
     
     def generate_response(self, prompt: str, max_length: int = 512, temperature: float = 0.7,
-                         top_p: float = 0.9, top_k: int = 50, do_sample: bool = True,
-                         num_return_sequences: int = 1) -> Dict[str, Any]:
+                          top_p: float = 0.9, top_k: int = 50, do_sample: bool = True,
+                          num_return_sequences: int = 1) -> Dict[str, Any]:
         """Generate a response using the loaded model."""
-        if self.model is None or self.tokenizer is None:
+        if self.generator is None:
             raise Exception("No model is currently loaded. Please deploy a model first.")
         
         if self.is_loading:
@@ -227,6 +204,10 @@ class ModelManager:
         
         try:
             start_time = time.time()
+            
+            # Standard approach for all models
+            if self.model is None or self.tokenizer is None:
+                raise Exception("Model or tokenizer not properly loaded.")
             
             # Tokenize input
             inputs = self.tokenizer(prompt, return_tensors="pt")
@@ -270,15 +251,25 @@ class ModelManager:
     def get_status(self) -> Dict[str, Any]:
         """Get the current status of the model."""
         device = "unknown"
+        
+        # Check if model is loaded
+        is_loaded = self.model is not None or self.generator is not None
+        
         if self.model is not None:
             if hasattr(self.model, 'device'):
                 device = str(self.model.device)
             elif hasattr(self.model, 'hf_device_map'):
                 device = str(self.model.hf_device_map)
+        elif self.generator is not None:
+            # For pipeline, check if it has device info
+            if hasattr(self.generator, 'device'):
+                device = str(self.generator.device)
+            else:
+                device = "cpu"  # Default
         
         return {
             "model_name": self.model_name,
-            "is_loaded": self.model is not None,
+            "is_loaded": is_loaded,
             "is_loading": self.is_loading,
             "device": device
         }

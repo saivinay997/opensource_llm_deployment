@@ -95,18 +95,4 @@ async def undeploy_model():
 
 
 
-# @router.get("/")
-# async def root():
-#     """Root endpoint with service information."""
-#     return {
-#         "service": "Open Source LLM Deployment Service",
-#         "version": "1.0.0",
-#         "endpoints": {
-#             "deploy": "POST /deploy - Deploy a model from Hugging Face",
-#             "query": "POST /query - Query the deployed model",
-#             "status": "GET /status - Get model status",
-#             "undeploy": "DELETE /undeploy - Undeploy current model"
-#         },
-#         "web_interface": "GET /web-interface - Access the web interface",
-#         "supported_models": "Any Hugging Face model supported"
-#     }
+

@@ -99,7 +99,7 @@ class ModelManager:
                 logger.info("Applying memory optimizations for large model")
                 model_kwargs.update({
                     "low_cpu_mem_usage": True,
-                    "torch_dtype": torch.float32,  # Use float32 for better compatibility
+                    "dtype": torch.float32,  # Use float32 for better compatibility
                     "offload_folder": "offload",  # Enable model offloading
                 })
             else:

@@ -147,7 +147,7 @@ You can customize the deployment by setting environment variables:
 ```bash
 # Create .env file
 cat > .env << EOF
-TRANSFORMERS_CACHE=/app/.cache/transformers
+HF_HOME=/app/.cache/transformers
 HF_HOME=/app/.cache/huggingface
 EOF
 ```

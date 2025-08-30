@@ -5,17 +5,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - TRANSFORMERS_CACHE=/app/.cache/transformers
+      - HF_HOME=/app/.cache/transformers
       - HF_HOME=/app/.cache/huggingface
     volumes:
       - model-cache:/app/.cache
       - ./logs:/app/logs
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
 volumes:
   model-cache:

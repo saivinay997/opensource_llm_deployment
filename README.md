@@ -190,7 +190,7 @@ This service supports any causal language model from Hugging Face, including:
 You can set the following environment variables:
 
 - `CUDA_VISIBLE_DEVICES`: Specify which GPU to use
-- `TRANSFORMERS_CACHE`: Set custom cache directory for models
+- `HF_HOME`: Set custom cache directory for models
 - `HF_HOME`: Set Hugging Face home directory
 
 ### Authentication for Gated Models

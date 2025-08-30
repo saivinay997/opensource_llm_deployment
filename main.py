@@ -30,6 +30,7 @@ app.add_middleware(
     allow_headers=settings.ALLOW_HEADERS,
 )
 
+
 # Mount static files
 app.mount("/static", StaticFiles(directory="."), name="static")
 
